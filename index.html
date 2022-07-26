@@ -6,16 +6,33 @@
         <title>원펫 File Viewer</title>
         <style>
             body {
+                width: 100%;
+                height: 100vh;
                 background: black;
                 margin: 0;
                 color: white;
                 display: flex;
             }
             #video-player, #image-viewer, #audio-player {
-                flex-grow: 1;
+                flex-grow: 0;
                 max-width: 100%;
                 margin: 0;
-                max-height: fit-content;
+                height: fit-content;
+                max-height: 100vh;
+                object-fit: scale-down;
+                user-select: none;
+                cursor: zoom-in;
+            }
+            #video-player {
+                object-fit: contain;
+                margin: auto;
+                max-height: 100vh;
+            }
+            #image-viewer[aria-zoomed=true] {
+                flex-grow: 1;
+                object-fit: contain;
+                cursor: zoom-out;
+                max-height: none;
             }
             
             #video-player[aria-hidden=true], #image-viewer[aria-hidden=true], #audio-player[aria-hidden=true] {
@@ -43,6 +60,14 @@
         const videoPlayer = document.getElementById('video-player');
         const imageViewer = document.getElementById('image-viewer');
         const audioPlayer = document.getElementById('audio-player');
+
+        // image zoom toggle
+        let imageZoomed = true;
+        imageViewer.setAttribute('aria-zoomed', imageZoomed);
+        imageViewer.onclick = () => {
+            imageZoomed = !imageZoomed;
+            imageViewer.setAttribute('aria-zoomed', imageZoomed);
+        };
 
         switch(fileExt) {
             // Image
