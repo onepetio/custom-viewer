@@ -1,0 +1,14 @@
+<!-- GET 값을 넣으면 알아서 동영상을 재생해줍니다 -->
+
+<body style="background:black;margin:0;">
+    <video style="width:100%;margin:0;max-height:fit-content;" id="video-player" controls autoplay loop>
+        <source style="margin:0;" id="video" type="video/mp4">
+    </video>
+</body>
+
+<script>
+    const videoURL = new URLSearchParams(window.location.search).get('url') ?? '';
+    const videoPlayer = document.getElementById('video-player');
+    videoPlayer.src = videoURL;
+    videoPlayer.load();
+</script>
