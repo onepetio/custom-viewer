@@ -1,18 +1,62 @@
-<!-- GET 값을 넣으면 알아서 동영상을 재생해줍니다 -->
+<!-- GET 값을 넣으면 알아서 파일을 보여줍니다 -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>원펫 File Viewer</title>
+        <style>
+            body {
+                background: black;
+                margin: 0;
+                color: white;
+            }
+            #video-player, #image-viewer, #audio-player {
+                width: 100%;
+                margin: 0;
+                max-height: fit-content;
+            }
+            
+            #video-player[aria-hidden=true], #image-viewer[aria-hidden=true], #audio-player[aria-hidden=true] {
+                display: none;
+            }
+            </style>
+    </head>
+    <body id="body">
+        <video id="video-player" aria-hidden="true" controls autoplay loop>
+            <source style="margin:0;" id="video" type="video/mp4">
+        </video>
+        <img id="image-viewer" aria-hidden="true" />
+    </body>
+    <script>
+        const fileURL = new URLSearchParams(window.location.search).get('url');
+    
+        if(!fileURL) {
+            throw -1;
+        }
+    
+        const fileExt = fileURL.split('.').pop();
+    
+        const videoPlayer = document.getElementById('video-player');
+        const imageViewer = document.getElementById('image-viewer');
+        const audioPlayer = document.getElementById('audio-player');
 
-<head>
-    <title>File Viewer</title>
-</head>
+        switch(fileExt) {
+            // Image
+            case 'jpg': case 'jpeg': case 'png': case 'gif': case 'bmp': case 'webp':
+                imageViewer.src = fileURL;
+                imageViewer.setAttribute('aria-hidden', 'false');
+                break;
+            
+            // Video
+            case 'mp4': case 'ogg': case 'webm': case 'mov':
+                videoPlayer.src = fileURL;
+                videoPlayer.load();
+                videoPlayer.setAttribute('aria-hidden', 'false');
+                break;
 
-<body style="background:black;margin:0;">
-    <video style="width:100%;margin:0;max-height:fit-content;" id="video-player" controls autoplay loop>
-        <source style="margin:0;" id="video" type="video/mp4">
-    </video>
-</body>
-
-<script>
-    const videoURL = new URLSearchParams(window.location.search).get('url') ?? '';
-    const videoPlayer = document.getElementById('video-player');
-    videoPlayer.src = videoURL;
-    videoPlayer.load();
-</script>
+            // Default (ERROR)
+            default:
+                const body = document.getElementById('body');
+                body.innerHTML = `뷰어가 제공되지 않는 파일 확장자입니다:<br/> ${fileExt} - ${fileURL}`;
+        }
+    </script>
+</html>
