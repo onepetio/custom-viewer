@@ -30,6 +30,8 @@
         const fileURL = new URLSearchParams(window.location.search).get('url');
     
         if(!fileURL) {
+            const body = document.getElementById('body');
+            body.innerHTML = '파일이 없습니다.';
             throw -1;
         }
     
