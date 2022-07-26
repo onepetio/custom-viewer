@@ -2,15 +2,18 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8" />
         <title>원펫 File Viewer</title>
         <style>
             body {
                 background: black;
                 margin: 0;
                 color: white;
+                display: flex;
             }
             #video-player, #image-viewer, #audio-player {
-                width: 100%;
+                flex-grow: 1;
+                max-width: 100%;
                 margin: 0;
                 max-height: fit-content;
             }
