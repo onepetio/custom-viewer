@@ -34,7 +34,7 @@
                 cursor: zoom-out;
                 max-height: none;
             }
-            
+
             #video-player[aria-hidden=true], #image-viewer[aria-hidden=true], #audio-player[aria-hidden=true] {
                 display: none;
             }
@@ -48,15 +48,22 @@
     </body>
     <script>
         const fileURL = new URLSearchParams(window.location.search).get('url');
-    
+
         if(!fileURL) {
             const body = document.getElementById('body');
             body.innerHTML = '파일이 없습니다.';
             throw -1;
         }
-    
-        const fileExt = fileURL.split('.').pop();
-    
+
+        let fileExt = '';
+
+        const fileExtCandidate = fileURL.split('.').pop();
+        if(fileExtCandidate.includes('?')) {
+          fileExt = fileExtCandidate.split('?').shift();
+        } else {
+          fileExt = fileExtCandidate;
+        }
+
         const videoPlayer = document.getElementById('video-player');
         const imageViewer = document.getElementById('image-viewer');
         const audioPlayer = document.getElementById('audio-player');
@@ -75,7 +82,7 @@
                 imageViewer.src = fileURL;
                 imageViewer.setAttribute('aria-hidden', 'false');
                 break;
-            
+
             // Video
             case 'mp4': case 'ogg': case 'webm': case 'mov':
                 videoPlayer.src = fileURL;
